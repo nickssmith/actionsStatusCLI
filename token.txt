@@ -1,2 +1,1 @@
-w
-/home/nick/Git/actionsStatusCLI/token.txt
+ae68205f151b6862d69d0c694498873938529c34
