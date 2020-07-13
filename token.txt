@@ -1,0 +1,2 @@
+w
+/home/nick/Git/actionsStatusCLI/token.txt
