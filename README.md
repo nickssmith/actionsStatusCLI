@@ -85,3 +85,4 @@ See the contents of the `.sh` script for details
 ## TODO LIST
  - do a git fetch to check for updates after running
  - check for new PRs made by actions and report them
+ - show logs in console instead of links

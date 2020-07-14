@@ -1,4 +1,9 @@
-import requests, json, threading, time, os
+import json
+import os
+import requests
+import subprocess
+import threading
+import time
 
 
 class actionsStatus:
@@ -28,6 +33,15 @@ class actionsStatus:
 
         assert self.access_token != None
 
+    def check_for_update(self):
+        script_dir = os.path.dirname(__file__)
+        process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE, cwd=script_dir)
+        stdout = process.communicate()[0]
+        stdout = stdout.decode('utf-8')
+        up_to_date = ("Already up to date" in stdout)
+        if not up_to_date:
+            print("actionsStatusCLI has been updated automatically after running")
+
     def update_local(self):
         """
         updates the local list of workflows on the repo
@@ -40,7 +54,10 @@ class actionsStatus:
         if response.status_code != 200:
             print("Failed to get workflows for repo {}".format(self.repo))
             print("Perhaps token is invalid or has insufficient permissions")
-            exit(1)
+            self.timeout_reached = True
+            self.has_running_actions = False
+            self.exiting = True
+            return
 
         repo_workflows = json.loads(response.text)
         for workflow in repo_workflows["workflows"]:
@@ -100,6 +117,9 @@ class actionsStatus:
         The main section of the program
         :return:
         """
+        # if token failed, then exit
+        if self.exiting:
+            return
 
         # starts countdown timeout in background
         timer_thread = threading.Timer(len(self.workflows) * self.timeout_to_find_running_actions, self.timer_done)
@@ -296,5 +316,6 @@ if __name__ == "__main__":
     actionsStatus.update_local()
     # run main program
     actionsStatus.run()
+    actionsStatus.check_for_update()
 
     # TODO check for update from its repo
