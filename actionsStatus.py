@@ -35,7 +35,7 @@ class actionsStatus:
 
     def check_for_update(self):
         script_dir = os.path.dirname(__file__)
-        process = subprocess.Popen(['git', 'checkout','master','--','actionsStatus.py'], stdout=subprocess.PIPE, cwd=script_dir)
+        process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE, cwd=script_dir)
         stdout = process.communicate()[0]
         stdout = stdout.decode('utf-8')
         up_to_date = ("Already up to date" in stdout)
