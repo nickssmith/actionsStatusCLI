@@ -35,7 +35,7 @@ class actionsStatus:
 
     def check_for_update(self):
         script_dir = os.path.dirname(__file__)
-        process = subprocess.Popen(['git', 'pull'], stdout=subprocess.PIPE, cwd=script_dir)
+        process = subprocess.Popen(['git', 'checkout','master','--','actionsStatus.py'], stdout=subprocess.PIPE, cwd=script_dir)
         stdout = process.communicate()[0]
         stdout = stdout.decode('utf-8')
         up_to_date = ("Already up to date" in stdout)
@@ -77,7 +77,7 @@ class actionsStatus:
                         self.repo_owner = line[line.find(":") + 1:line.find("/")]
                         self.repo = line[line.find("/") + 1:line.find(".git")]
                     elif "https:" in line:
-                        self.repo_owner = line[line.find("github.com/") + 1:line.rfind("/")]
+                        self.repo_owner = line[line.find("github.com/") + 11:line.rfind("/")]
                         self.repo = line[line.rfind("/") + 1:line.find(".git")]
 
 
