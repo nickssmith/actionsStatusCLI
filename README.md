@@ -8,7 +8,7 @@
 ## Setup (Automatic / recommended)
 1. Clone or download this repo
 1. Follow [this](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) guide to make a personal access token. [This](https://github.com/settings/tokens) link should take you to the github settings page to create a token
-1. Create the token with repo and workflow access (I just checked all boxes myself)
+1. Create the token with repo and workflow access ![!](token_settings.png) (or just check every box to be safe)
 1. Save the token to the text file in this repo called `token.txt`
 1. Run the `add_bash_aliases.sh` script
    - Changes to the `.bashrc` file take effect upon reloading it via `bash` or opening a new terminal window
@@ -72,6 +72,7 @@ NOTE: it may take a moment between the all actions finishing and the table being
 
 The program can be closed at any time with `ctrl-c`
 
+After each run it will do a check for updates from the master branch of this repo and pull them if needed
 
 ## Manual Install / Setup
 
@@ -79,10 +80,8 @@ Can be skipped if the automatic setup worked
 
 All that must be done is add the call `python3 /path/toactionStatus.py` to somewhere in your path and call it after `git push`
 
-See the contents of the `.sh` script for details
-
+See the contents of the `.sh` script for details. 
 
 ## TODO LIST
- - do a git fetch to check for updates after running
  - check for new PRs made by actions and report them
  - show logs in console instead of links

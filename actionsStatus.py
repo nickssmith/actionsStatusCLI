@@ -73,8 +73,15 @@ class actionsStatus:
             cfg_lines = git_config.readlines()
             for line in cfg_lines:
                 if "url = " in line:
-                    self.repo_owner = line[line.find(":") + 1:line.find("/")]
-                    self.repo = line[line.find("/") + 1:line.find(".git")]
+                    if "git@" in line:
+                        self.repo_owner = line[line.find(":") + 1:line.find("/")]
+                        self.repo = line[line.find("/") + 1:line.find(".git")]
+                    elif "https:" in line:
+                        self.repo_owner = line[line.find("github.com/") + 1:line.rfind("/")]
+                        self.repo = line[line.rfind("/") + 1:line.find(".git")]
+
+
+
 
     def load_access_token(self):  # TODO
         """
