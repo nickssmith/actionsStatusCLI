@@ -1,5 +1,6 @@
 # View the status of Github Actions for a repo in CLI
 
+moved to https://github.com/SFLScientific/GithubActionsStatusCLIViewer
 
 ## Requirements
  - python3
