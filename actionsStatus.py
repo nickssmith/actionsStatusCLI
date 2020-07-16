@@ -154,6 +154,7 @@ class actionsStatus:
         for pull_request in pull_requests:
             pr = dict()
             pr["state"] = pull_request["state"]
+            pr["number"] = pull_request["number"]
             pr["id"] = pull_request["id"]
             pr["url"] = pull_request["html_url"]
             open_pull_requests.append(pr)
@@ -211,12 +212,23 @@ class actionsStatus:
             print("\nNo running actions found for {}".format(self.repo))
         else:
             open_pull_requests_at_end = self.get_pull_requests()
-            new_pull_requests = open_pull_requests_at_end - open_pull_requests_at_start
-            print(new_pull_requests)
-            if len(new_pull_requests) > 0:
+            uuids_at_start = []
+            uuids_at_end = []
+            for pr in open_pull_requests_at_start:
+                uuid = str(pr["id"])+str(pr["number"])
+                uuids_at_start.append(uuid)
+            for pr in open_pull_requests_at_end:
+                uuid = str(pr["id"])+str(pr["number"])
+                uuids_at_end.append(uuid)
+
+            new_ids = list(set(uuids_at_end) - set(uuids_at_start))
+
+            if len(new_ids) > 0:
                 print("Pull requests created by actions")
-                for pr in new_pull_requests:
-                    print(pr["url"])
+                for id in new_ids:
+                    for pr in open_pull_requests_at_end:
+                        if (str(pr["id"]) and str(pr["number"])) in str(id):
+                            print(pr["url"])
 
         running_actions_thread.join()
         timer_thread.join()

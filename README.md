@@ -75,6 +75,11 @@ Failed runs logs can be found at
 |         Check Spelling | https://github.com/nickssmith/actionsTest/actions/runs/168014117 |
 +------------------------+------------------------------------------------------------------+
 ```
+If any pull requests were made by your actions (or while actions were running) then they will also be displayed
+```
+Pull requests created by actions
+https://github.com/nickssmith/actionsTest/pull/27
+```
 NOTE: it may take a moment between the all actions finishing and the table being displayed
 
 The program can be closed at any time with `ctrl-c`
@@ -90,5 +95,4 @@ All that must be done is add the call `python3 /path/toactionStatus.py` to somew
 See the contents of the `.sh` script for details. 
 
 ## TODO LIST
- - check for new PRs made by actions and report them
  - show logs in console instead of links
