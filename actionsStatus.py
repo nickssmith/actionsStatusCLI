@@ -69,7 +69,8 @@ class actionsStatus:
         Gets the repo info (owner + name) from the directory it was called in
         :return:
         """
-        with open(".git/config", "r") as git_config:
+        git_config = self.get_git_config_path()
+        with open(git_config, "r") as git_config:
             cfg_lines = git_config.readlines()
             for line in cfg_lines:
                 if "url = " in line:
@@ -80,8 +81,25 @@ class actionsStatus:
                         self.repo_owner = line[line.find("github.com/") + 11:line.rfind("/")]
                         self.repo = line[line.rfind("/") + 1:line.find(".git")]
 
+    def get_git_config_path(self):
+        """
+        returns the path to the base of the repo, in case not called in base directory
 
+        :return: path to git config
+        """
+        at_base_of_repo = False
+        location = os.getcwd()
+        # start at current location, if location isnt base of repo "cd .." and try again
+        while not at_base_of_repo:
+            # check for possible git config
+            git_config_path = os.path.join(location, ".git", "config")
+            if os.path.exists(git_config_path):
+                at_base_of_repo = True
+            else: # cd ..
+                location = os.path.abspath(os.path.join(location, os.pardir))
+        git_config_path = os.path.join(location, ".git", "config")
 
+        return git_config_path
 
     def load_access_token(self):  # TODO
         """
@@ -95,11 +113,12 @@ class actionsStatus:
                 token = token_file.read().strip()
                 self.access_token = token
         except Exception as e:
-            print("Failed to open {}, creating new file. Please replace contents of {} with your github personal access token".format(token_path,token_path))
-            with open(token_path,"w") as token_file:
+            print(
+                "Failed to open {}, creating new file. Please replace contents of {} with your github personal access token".format(
+                    token_path, token_path))
+            with open(token_path, "w") as token_file:
                 token_file.write("add token here")
             self.exiting = True
-
 
     def get_running_actions(self):
         """
