@@ -24,7 +24,7 @@
 If setup correctly, then the script will add 2 new bash commands
  - `gp` which will do a git push then run `gitActionsStatus`
  - `gitActionsStatus` which will run the script
-   - Can be called in any directory that has a `.git` folder
+   - Can be called in any directory that has a `.git` folder or any child directory of one with a git folder (anywhere in your git project will work)
 
 When running `gp` it will execute a standard `git push` and then display a table of the current status of all actions that were running
 ```
