@@ -88,15 +88,18 @@ class actionsStatus:
         Loads access token from file
         :return:
         """
+        script_dir = os.path.dirname(__file__)
+        token_path = os.path.join(script_dir, "token.txt")
         try:
-            script_dir = os.path.dirname(__file__)
-            token_path = os.path.join(script_dir, "token.txt")
             with open(token_path, "r") as token_file:
                 token = token_file.read().strip()
                 self.access_token = token
         except Exception as e:
-            print(e)
-            print("token.txt not found, making it and telling user")
+            print("Failed to open {}, creating new file. Please replace contents of {} with your github personal access token".format(token_path,token_path))
+            with open(token_path,"w") as token_file:
+                token_file.write("add token here")
+            self.exiting = True
+
 
     def get_running_actions(self):
         """
