@@ -9,7 +9,13 @@
 1. Clone or download this repo
 1. Follow [this](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) guide to make a personal access token. [This](https://github.com/settings/tokens) link should take you to the github settings page to create a token
 1. Create the token with repo and workflow access ![!](token_settings.png) (or just check every box to be safe)
-1. Save the token to the text file in this repo called `token.txt`
+1. Save the token to a text file in this repo called `token.txt`
+    ```
+        ├── actionsStatus.py
+        ├── add_bash_aliases.sh
+        ├── README.md
+        └── token.txt
+    ```
 1. Run the `add_bash_aliases.sh` script
    - Changes to the `.bashrc` file take effect upon reloading it via `bash` or opening a new terminal window
 
