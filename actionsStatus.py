@@ -95,7 +95,7 @@ class actionsStatus:
             git_config_path = os.path.join(location, ".git", "config")
             if os.path.exists(git_config_path):
                 at_base_of_repo = True
-            else: # cd ..
+            else:  # cd ..
                 location = os.path.abspath(os.path.join(location, os.pardir))
         git_config_path = os.path.join(location, ".git", "config")
 
@@ -145,6 +145,20 @@ class actionsStatus:
 
         return list_of_running_workflow_ids
 
+    def get_pull_requests(self):
+        response = requests.get(
+            'https://api.github.com/repos/{owner}/{repo}/pulls'.format(
+                owner=self.repo_owner, repo=self.repo), auth=(self.access_token, 'x-oauth-basic'))
+        pull_requests = json.loads(response.text)
+        open_pull_requests = []
+        for pull_request in pull_requests:
+            pr = dict()
+            pr["state"] = pull_request["state"]
+            pr["id"] = pull_request["id"]
+            pr["url"] = pull_request["html_url"]
+            open_pull_requests.append(pr)
+        return open_pull_requests
+
     def run(self):
         """
         The main section of the program
@@ -153,6 +167,8 @@ class actionsStatus:
         # if token failed, then exit
         if self.exiting:
             return
+
+        open_pull_requests_at_start = self.get_pull_requests()
 
         # starts countdown timeout in background
         timer_thread = threading.Timer(len(self.workflows) * self.timeout_to_find_running_actions, self.timer_done)
@@ -193,6 +209,14 @@ class actionsStatus:
         # print if no actions found
         if len(self.set_of_running_action_ids) == 0:
             print("\nNo running actions found for {}".format(self.repo))
+        else:
+            open_pull_requests_at_end = self.get_pull_requests()
+            new_pull_requests = open_pull_requests_at_end - open_pull_requests_at_start
+            print(new_pull_requests)
+            if len(new_pull_requests) > 0:
+                print("Pull requests created by actions")
+                for pr in new_pull_requests:
+                    print(pr["url"])
 
         running_actions_thread.join()
         timer_thread.join()
